@@ -38,9 +38,18 @@ pipeline {
                       docker cp zap:/zap/wrk/reports/zap_xml_report.xml ${WORKSPACE}/results/zap_xml_report.xml
                       docker stop zap juice-shop
                       docker rm zap
-                      //docker rm zapdocker exec -it zap bash
+                      // docker rm zapdocker exec -it zap bash
                   '''
               }
+            }
+        }
+        stage('osv-scanner') {
+            steps {
+                sh '''
+                osv-scanner scan --lockfile package-lock.json --format json --output osv-scan.json || true
+                ls -la
+                head osv.json
+                ''' 
             }
         }
     }
@@ -50,6 +59,7 @@ pipeline {
             archiveArtifacts artifacts: 'results/**/*', fingerprint: true, allowEmptyArchive: true
             echo 'Sending reports to DefectDojo...'
             defectDojoPublisher(artifact: 'results/zap_xml_report.xml', productName: 'Juice Shop', scanType: 'ZAP Scan', engagementName: 'Zwolan.Tomasz@polskiautobuswodorowy.pl')
+            defectDojoPublisher(artifact: 'osv-scan.json', productName: 'Juice Shop', scanType: 'OSV Scan', engagementName: 'Zwolan.Tomasz@polskiautobuswodorowy.pl')
         }
     }
 }
