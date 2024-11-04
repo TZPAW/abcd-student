@@ -17,6 +17,18 @@ pipeline {
                 //sh 'mkdir -p results/'
         //    }
         //}
+        stage('osv-scanner') {
+            steps {
+                sh '''
+                    echo 'Starting OSV Scan'
+                    osv-scanner scan --lockfile package-lock.json --format json --output osv-scan.json || true
+                    ls -la
+                    head osv.json
+                    echo 'Stop OSV Scan'
+                ''' 
+                defectDojoPublisher(artifact: 'osv-scan.json', productName: 'Juice Shop', scanType: 'OSV Scan', engagementName: 'Zwolan.Tomasz@polskiautobuswodorowy.pl')
+            }
+        }
         stage('DAST')  {
             steps {
                 sh '''
@@ -43,15 +55,7 @@ pipeline {
               }
             }
         }
-        stage('osv-scanner') {
-            steps {
-                sh '''
-                osv-scanner scan --lockfile package-lock.json --format json --output osv-scan.json || true
-                ls -la
-                head osv.json
-                ''' 
-            }
-        }
+
     }
     post {
         always {
@@ -59,7 +63,7 @@ pipeline {
             archiveArtifacts artifacts: 'results/**/*', fingerprint: true, allowEmptyArchive: true
             echo 'Sending reports to DefectDojo...'
             defectDojoPublisher(artifact: 'results/zap_xml_report.xml', productName: 'Juice Shop', scanType: 'ZAP Scan', engagementName: 'Zwolan.Tomasz@polskiautobuswodorowy.pl')
-            defectDojoPublisher(artifact: 'osv-scan.json', productName: 'Juice Shop', scanType: 'OSV Scan', engagementName: 'Zwolan.Tomasz@polskiautobuswodorowy.pl')
+            
         }
     }
 }
