@@ -32,6 +32,7 @@ pipeline {
         stage('DAST')  {
             steps {
                 sh '''
+                  docker rm -f juice-shop zap
                   docker run --name juice-shop -d --rm -p 3000:3000 bkimminich/juice-shop
                   sleep 5
                 '''
@@ -48,9 +49,11 @@ pipeline {
                   sh '''
                       docker cp zap:/zap/wrk/reports/zap_html_report.html ${WORKSPACE}/results/zap_html_report.html
                       docker cp zap:/zap/wrk/reports/zap_xml_report.xml ${WORKSPACE}/results/zap_xml_report.xml
-                      docker stop zap juice-shop
-                      docker rm zap
-                      // docker rm zapdocker exec -it zap bash
+                      // docker stop zap juice-shop
+                      // docker rm zap
+                      head /tmp/reports/zap_xml_report.xml
+                      echo 'Sending reports to DefectDojo...'
+                      defectDojoPublisher(artifact: 'results/zap_xml_report.xml', productName: 'Juice Shop', scanType: 'ZAP Scan', engagementName: 'Zwolan.Tomasz@polskiautobuswodorowy.pl')
                   '''
               }
             }
@@ -61,8 +64,7 @@ pipeline {
         always {
             echo 'Archiving results...'
             archiveArtifacts artifacts: 'results/**/*', fingerprint: true, allowEmptyArchive: true
-            echo 'Sending reports to DefectDojo...'
-            defectDojoPublisher(artifact: 'results/zap_xml_report.xml', productName: 'Juice Shop', scanType: 'ZAP Scan', engagementName: 'Zwolan.Tomasz@polskiautobuswodorowy.pl')
+
             
         }
     }
