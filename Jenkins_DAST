@@ -22,13 +22,12 @@ pipeline {
                 sh '''
                 echo 'Starting Trufflehog Scan'
                 date
-                sleep 5
-                           
-                sleep 5
+                                           
+                
                 echo 'Stop Trufflehog Scan'
                 '''
-                // trufflehog git file://. --branch=main --fail --force-skip-archives --json > truffle_hog.json
-               defectDojoPublisher(artifact: 'truffle_hog.json', productName: 'Juice Shop', scanType: 'Trufflehog Scan', engagementName: 'Zwolan.Tomasz@polskiautobuswodorowy.pl')
+               trufflehog git file://. --branch=main --fail --force-skip-archives --json > truffle_hog.json
+               // defectDojoPublisher(artifact: 'truffle_hog.json', productName: 'Juice Shop', scanType: 'Trufflehog Scan', engagementName: 'Zwolan.Tomasz@polskiautobuswodorowy.pl')
             }
        }
         stage('osv-scanner') {
