@@ -23,7 +23,7 @@ pipeline {
                 echo 'Starting Trufflehog Scan'
                 date
                 sleep 5
-                trufflehog file://. --branch=main --fail --force-skip-archives --json > truffle_hog.json               
+                trufflehog filesystem --path=. --branch=main --fail --force-skip-archives --json > truffle_hog.json               
                 sleep 5
                 echo 'Stop Trufflehog Scan'
                 '''  
