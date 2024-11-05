@@ -22,7 +22,9 @@ pipeline {
                 sh '''
                 echo 'Starting Trufflehog Scan'
                 date
+                sleep 5
                 trufflehog git file://. --branch=main --fail --force-skip-archives --json > truffle_hog.json               
+                sleep 5
                 // trufflehog git -j --branch=main 'https://github.com/TZPAW/abcd-student' > truffle_hog.json
                 cat truffle_hog.json
                 echo 'Stop Trufflehog Scan'
