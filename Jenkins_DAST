@@ -17,6 +17,17 @@ pipeline {
                 //sh 'mkdir -p results/'
         //    }
         //}
+        stage('trufflehog') {
+            steps {
+                sh '''
+                echo 'Starting Trufflehog Scan'
+                trufflehog git -j --branch=main 'https://github.com/TZPAW/abcd-student.git' > truffle_hog.json
+                cat truffle_hog.json
+                echo 'Stop Trufflehog Scan'
+                '''  
+              defectDojoPublisher(artifact: 'truffle_hog.json', productName: 'Juice Shop', scanType: 'Trufflehog Scan', engagementName: 'Zwolan.Tomasz@polskiautobuswodorowy.pl')
+            }
+       }
         stage('osv-scanner') {
             steps {
                 sh '''
