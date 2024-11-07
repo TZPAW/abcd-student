@@ -24,8 +24,7 @@ pipeline {
                     echo 'Starting Semgrep Scan'
                     semgrep scan --config auto --json > semgrep_scan.json || true
                     echo 'Stop Semgrep Scan'
-                    head semgrep_scan.json
-                    cat semgrep_scan.json
+                    test -a semgrep_scan.json
                     defectDojoPublisher(artifact: 'semgrep_scan.json', productName: 'Juice Shop', scanType: 'Semgrep JSON Report', engagementName: 'Zwolan.Tomasz@polskiautobuswodorowy.pl')
                  '''
             }
