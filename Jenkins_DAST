@@ -25,8 +25,10 @@ pipeline {
                     
                     echo 'Stop Semgrep Scan'
                     
-                    defectDojoPublisher(artifact: 'semgrep_scan.json', productName: 'Juice Shop', scanType: 'Semgrep JSON Report', engagementName: 'Zwolan.Tomasz@polskiautobuswodorowy.pl')
+                    
                  '''
+                defectDojoPublisher(artifact: 'semgrep_scan.json', productName: 'Juice Shop', scanType: 'Semgrep JSON Report', engagementName: 'Zwolan.Tomasz@polskiautobuswodorowy.pl')
+
                 // semgrep scan --config auto --json > semgrep_scan.json || true
                 // test -e semgrep_scan.json
             }
