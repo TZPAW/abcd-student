@@ -22,7 +22,7 @@ pipeline {
             steps {
                 sh '''
                     echo 'Starting Semgrep Scan'
-                    
+                    semgrep scan --config auto --json > semgrep_scan.json || true 
                     echo 'Stop Semgrep Scan'
                     
                     
