@@ -29,6 +29,7 @@ pipeline {
                     defectDojoPublisher(artifact: 'semgrep_scan.json', productName: 'Juice Shop', scanType: 'Semgrep JSON Report', engagementName: 'Zwolan.Tomasz@polskiautobuswodorowy.pl')
                  '''
             }
+        }
 
         stage('Fake') {
             steps {
