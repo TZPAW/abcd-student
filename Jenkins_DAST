@@ -4,14 +4,14 @@ pipeline {
         skipDefaultCheckout(true)
     }
     stages {
-        //stage('Code checkout from GitHub') {
-        //    steps {
-        //        script {
-        //            cleanWs()
-        //            git credentialsId: 'github-token', url: 'https://github.com/TZPAW/abcd-student', branch: 'main'
-        //        }
-        //    }
-        //}
+        stage('Code checkout from GitHub') {
+            steps {
+                script {
+                    cleanWs()
+                    git credentialsId: 'github-token', url: 'https://github.com/TZPAW/abcd-student', branch: 'main'
+                }
+            }
+        }
         //stage('Prepare') {
         //    steps {
                 //sh 'mkdir -p results/'
